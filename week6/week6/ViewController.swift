@@ -10,53 +10,79 @@ import UIKit
 class ViewController: UIViewController{
 
 
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var clock: UILabel! // 카운트 다운
-    @IBOutlet weak var alram: UITextField! // 입력한 시간
+
     var dataArray: [String] = []// 알람시간 저장 배열
-    
+    var timer = 0
+    var tog = false
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        dataArray = (UserDefaults.standard.array(forKey: "data") as? [String]) ?? [] // 배열에다가 DB에 저장된 스트링 배열을 임시 저장 배열로 옮김.
+        dataArray = UserDefaults.standard.array(forKey: "data") as? [String] ?? [] //
         threadTest()
         print("Start")
-        print(UserDefaults.standard.array(forKey: "data") ?? nil)
+        print(UserDefaults.standard.array(forKey: "data") ?? [])
+        self.tableView.dataSource = self
+
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        UserDefaults.standard.set(dataArray,forKey: "data") // 앱이 꺼진후에 배열에 저장된 시간 정보를 DB에 저장한다.
-    }
+
     
-    @IBAction func resetClicked(_ sender: Any) {
-        threadTest()
+    @IBAction func recordClicked(_ sender: Any) {
+        dataArray.append(String(timer))
+        print("saved data")
+        print(timer)
+        print(dataArray)
+        UserDefaults.standard.set(dataArray,forKey: "data")
+        self.tableView.reloadData()
     }
     @IBAction func buttonDidClicked(_ sender: Any) {
-        let text = alram.text! // textfield 의 내용을 text에 담는다
-        dataArray.append(text) // 내용을 dataArray에 추가한다.
-        print("saved data")
-        print(text)
-        print(dataArray)
+        tog.toggle()
     }
     
+    @IBAction func clearButton(_ sender: Any) {
+        dataArray = []
+        self.tableView.reloadData()
+    }
     
     func threadTest() {
-        print(UserDefaults.standard.array(forKey: "data") ?? nil)
+        print(UserDefaults.standard.array(forKey: "data") ?? [])
         DispatchQueue.global().async {
-            for num in 0...20 {
-                DispatchQueue.main.async {
-                    self.clock.text = String(20-num) // clock UI 카운트다운
-                    print(self.clock.text!)
-                    if num == 20 { // 0이 되었을떄 done
-                        self.clock.text = "done"
+                for _ in 0...1000 {
+                    DispatchQueue.main.async {
+                        if self.tog {
+                            self.timer += 1
+                            self.clock.text = String(self.timer) // clock UI
+                            print(self.clock.text!)
+                        }
                     }
-                    if (self.dataArray.contains(self.clock.text!)) {
-                        print("알람") // dataArray 에 저장된 시간이 clock 의 숫자를 포함한다면 "알람" 출력
-                    }
+                    sleep(1)
+                    
                 }
-
-                sleep(2)
-            }
         }
         
     }
+}
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = dataArray[indexPath.row]
+            return cell
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataArray.count
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            
+            dataArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+        } else if editingStyle == .insert {
+            
+        }
+    }
+
 }
 

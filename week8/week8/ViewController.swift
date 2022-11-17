@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         orangeViewTapGestureRecognizer.addTarget(self, action: #selector(orangeViewDidTap))
-        
     }
 
     @objc func orangeViewDidTap() {
