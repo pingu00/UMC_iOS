@@ -12,7 +12,8 @@ class ViewController: UIViewController{
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var clock: UILabel! // 카운트 다운
-
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var num: UILabel!
     var dataArray: [String] = []// 알람시간 저장 배열
     var timer = 0
     var tog = false
@@ -24,7 +25,10 @@ class ViewController: UIViewController{
         print("Start")
         print(UserDefaults.standard.array(forKey: "data") ?? [])
         self.tableView.dataSource = self
-
+        UIView.animate(withDuration: 3, animations: {
+            self.topConstraint.constant = 20
+            self.view.layoutIfNeeded()
+        })
     }
 
     

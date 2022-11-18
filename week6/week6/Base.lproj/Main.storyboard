@@ -23,6 +23,7 @@
                                         <rect key="frame" x="38" y="8" width="165" height="101"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="165" id="I4F-Db-kTL"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="101" id="IfC-Wh-YIX"/>
                                             <constraint firstAttribute="height" constant="101" id="gmF-KC-Tmb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="50"/>
@@ -98,7 +99,9 @@
                     </view>
                     <connections>
                         <outlet property="clock" destination="8eX-Pe-4Ld" id="fi9-nt-0sB"/>
+                        <outlet property="num" destination="8eX-Pe-4Ld" id="qVp-H5-cL1"/>
                         <outlet property="tableView" destination="YH5-FZ-pJm" id="etx-33-hXR"/>
+                        <outlet property="topConstraint" destination="PPB-v7-vFR" id="qRb-dw-CXB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
