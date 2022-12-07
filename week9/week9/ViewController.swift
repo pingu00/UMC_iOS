@@ -44,6 +44,19 @@ class ViewController: UIViewController {
                        }
                    }
                }
+        else{
+            UserApi.shared.loginWithKakaoAccount {(oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("loginWithKakaoTalk() success.")
+
+                    //do something
+                    _ = oauthToken
+                }
+            }
+        }
     }
     
 
